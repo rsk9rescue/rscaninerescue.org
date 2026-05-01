@@ -27,6 +27,856 @@
         }
       };
     </script>
+    <style>
+      :root { --navy: #1B3A5C; --gold: #D4A84B; --cream: #F5F5F0; }
+      html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+      body { font-family: 'Inter', system-ui, sans-serif; color: #2D3748; }
+      .fade-in { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease-out, transform 0.7s ease-out; }
+      .fade-in.visible { opacity: 1; transform: translateY(0); }
+      .hero-paw { position: absolute; font-size: 120px; opacity: 0.07; color: white; pointer-events: none; user-select: none; }
+      .hero-paw-1 { top: 10%; right: 8%; transform: rotate(-20deg); }
+      .hero-paw-2 { bottom: 12%; left: 6%; transform: rotate(15deg); font-size: 90px; }
+      .hero-paw-3 { top: 40%; left: 20%; transform: rotate(-40deg); font-size: 60px; }
+      .stat-card { background: white; border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 4px 20px rgba(27,58,92,0.08); border-bottom: 4px solid var(--gold); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+      .stat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(27,58,92,0.14); }
+      .program-card { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 2px 16px rgba(27,58,92,0.07); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid #E8E8E0; }
+      .program-card:hover { transform: translateY(-6px); box-shadow: 0 12px 36px rgba(27,58,92,0.12); }
+      .vol-card { background: white; border-radius: 12px; padding: 1.25rem 1.5rem; border-left: 4px solid var(--gold); box-shadow: 0 2px 12px rgba(27,58,92,0.06); transition: transform 0.2s ease; }
+      .vol-card:hover { transform: translateX(4px); }
+      .dog-card { border-radius: 16px; overflow: hidden; background: white; box-shadow: 0 4px 20px rgba(27,58,92,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+      .dog-card:hover { transform: translateY(-6px); box-shadow: 0 12px 36px rgba(27,58,92,0.14); }
+      .dog-placeholder { width: 100%; aspect-ratio: 1; background: linear-gradient(135deg, #E8EEF4 0%, #D4DDE8 100%); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; color: #9BB0C8; }
+      .donate-card { background: white; border-radius: 16px; padding: 1.75rem; text-align: center; box-shadow: 0 2px 16px rgba(27,58,92,0.06); border: 2px solid transparent; transition: all 0.3s ease; cursor: pointer; }
+      .donate-card:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 8px 28px rgba(27,58,92,0.12); }
+      .county-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; border-radius: 999px; font-weight: 600; font-size: 0.95rem; transition: transform 0.2s ease; }
+      .county-badge:hover { transform: scale(1.05); }
+      .btn-gold { background: var(--gold); color: #1B3A5C; font-weight: 700; border-radius: 999px; padding: 0.85rem 2rem; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem; }
+      .btn-gold:hover { background: #C49A3A; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,168,75,0.35); }
+      .btn-outline { border: 2px solid white; color: white; font-weight: 600; border-radius: 999px; padding: 0.85rem 2rem; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem; }
+      .btn-outline:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
+      .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+      .modal-overlay.active { opacity: 1; pointer-events: auto; }
+      .modal-content { background: white; border-radius: 20px; padding: 2rem; max-width: 480px; width: 90%; max-height: 90vh; overflow-y: auto; transform: scale(0.9); transition: transform 0.3s ease; }
+      .modal-overlay.active .modal-content { transform: scale(1); }
+      #back-to-top { position: fixed; bottom: 2rem; right: 2rem; z-index: 50; background: var(--navy); color: white; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(27,58,92,0.3); opacity: 0; pointer-events: none; transition: all 0.3s ease; cursor: pointer; border: none; }
+      #back-to-top.show { opacity: 1; pointer-events: auto; }
+      #back-to-top:hover { background: #2A5080; transform: translateY(-3px); }
+      .crisis-stat { background: linear-gradient(135deg, #1B3A5C 0%, #2A5080 100%); color: white; border-radius: 16px; padding: 2rem; text-align: center; position: relative; overflow: hidden; }
+      .crisis-stat::after { content: ''; position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; border-radius: 50%; background: rgba(212,168,75,0.15); }
+      .membership-card { background: white; border-radius: 16px; padding: 1.5rem; text-align: center; border: 2px solid #E8E8E0; transition: all 0.3s ease; }
+      .membership-card:hover { border-color: var(--gold); box-shadow: 0 8px 24px rgba(27,58,92,0.1); }
+      input:focus, textarea:focus, select:focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 3px rgba(27,58,92,0.15); }
+    </style>
 </head>
-<body>RS Canine Rescue - Site Loading</body>
+<body data-id="0" class="bg-white">
+
+    <!-- STICKY NAVIGATION -->
+    <header data-id="2" id="main-nav-3f8a" class="fixed top-0 left-0 right-0 z-50 bg-navy shadow-lg">
+        <div data-id="3" class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+            <div data-id="4" class="flex items-center justify-between h-[72px]">
+                <a data-id="5" href="#home" class="flex items-center gap-2 text-white font-bold text-xl md:text-2xl shrink-0" id="logo-link-9k2s">
+                    <span data-id="6" class="text-2xl">🐾</span>
+                    <span data-id="7" class="font-display">RS Canine Rescue</span>
+                </a>
+                <nav data-id="8" class="hidden lg:flex items-center gap-1" id="desktop-nav-x4m1">
+                    <a data-id="9" href="#home" class="nav-link text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">Home</a>
+                    <a data-id="10" href="#about" class="nav-link text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">About</a>
+                    <a data-id="11" href="#crisis" class="nav-link text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">Our Mission</a>
+                    <a data-id="12" href="#programs" class="nav-link text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">Programs</a>
+                    <a data-id="13" href="#volunteer" class="nav-link text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">Volunteer</a>
+                    <a data-id="14" href="#adopt" class="nav-link text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">Adopt</a>
+                    <a data-id="15" href="#donate" class="nav-link text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">Donate</a>
+                    <a data-id="16" href="#contact" class="nav-link text-white/80 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">Contact</a>
+                </nav>
+                <button data-id="17" id="mobile-menu-btn-a7k3" class="lg:hidden p-2 text-white" aria-label="Open menu">
+                    <i data-id="18" data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE MENU -->
+    <nav data-id="19" id="mobile-menu-p9r2" class="hidden fixed inset-0 bg-navy z-[60] flex flex-col p-6" role="navigation" aria-label="Mobile navigation">
+        <div data-id="20" class="flex items-center justify-between mb-8">
+            <span data-id="21" class="text-white font-bold text-xl flex items-center gap-2">
+                <span data-id="22" class="text-2xl">🐾</span>
+                <span data-id="23" class="font-display">RS Canine Rescue</span>
+            </span>
+            <button data-id="24" id="mobile-menu-close-b2c4" class="p-2 text-white" aria-label="Close menu">
+                <i data-id="25" data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <div data-id="26" class="flex flex-col gap-1">
+            <a data-id="27" href="#home" class="mobile-nav-link text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-xl text-lg font-medium transition-all">Home</a>
+            <a data-id="28" href="#about" class="mobile-nav-link text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-xl text-lg font-medium transition-all">About</a>
+            <a data-id="29" href="#crisis" class="mobile-nav-link text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-xl text-lg font-medium transition-all">Our Mission</a>
+            <a data-id="30" href="#programs" class="mobile-nav-link text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-xl text-lg font-medium transition-all">Programs</a>
+            <a data-id="31" href="#volunteer" class="mobile-nav-link text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-xl text-lg font-medium transition-all">Volunteer</a>
+            <a data-id="32" href="#adopt" class="mobile-nav-link text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-xl text-lg font-medium transition-all">Adopt</a>
+            <a data-id="33" href="#donate" class="mobile-nav-link text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-xl text-lg font-medium transition-all">Donate</a>
+            <a data-id="34" href="#contact" class="mobile-nav-link text-white/90 hover:text-white hover:bg-white/10 px-4 py-3 rounded-xl text-lg font-medium transition-all">Contact</a>
+        </div>
+    </nav>
+
+    <main data-id="35">
+        <!-- HERO SECTION -->
+        <section data-id="36" id="home" class="relative min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden" style="background: linear-gradient(135deg, #0D1E30 0%, #1B3A5C 40%, #2A5080 100%);">
+            <div data-id="37" class="hero-paw hero-paw-1" aria-hidden="true">🐾</div>
+            <div data-id="38" class="hero-paw hero-paw-2" aria-hidden="true">🐾</div>
+            <div data-id="39" class="hero-paw hero-paw-3" aria-hidden="true">🐾</div>
+            <div data-id="40" class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20"></div>
+            <div data-id="41" class="relative z-10 text-center px-5 md:px-8 max-w-4xl mx-auto pt-20">
+                <p data-id="42" class="text-gold font-semibold tracking-[0.2em] uppercase text-sm md:text-base mb-4 fade-in">Sumrall, Mississippi</p>
+                <h1 data-id="43" class="font-display text-4xl md:text-5xl lg:text-7xl text-white leading-tight mb-6 fade-in" id="hero-heading-q3w1">Every Dog Deserves a Second Chance</h1>
+                <p data-id="44" class="text-xl md:text-2xl text-blue-200 mb-3 font-medium fade-in">RS Canine Rescue — Saving Lives in Rural South Mississippi</p>
+                <p data-id="45" class="text-gold-light text-lg md:text-xl font-semibold tracking-wide mb-10 fade-in">Rescue. Rehabilitate. Rehome.</p>
+                <div data-id="46" class="flex flex-col sm:flex-row items-center justify-center gap-4 fade-in">
+                    <a data-id="47" href="#adopt" class="btn-gold text-base md:text-lg min-h-[48px]">
+                        <i data-id="48" data-lucide="heart" class="w-5 h-5"></i>
+                        Adopt a Dog
+                    </a>
+                    <a data-id="49" href="#volunteer" class="btn-outline text-base md:text-lg min-h-[48px]">
+                        <i data-id="50" data-lucide="users" class="w-5 h-5"></i>
+                        Become a Volunteer
+                    </a>
+                </div>
+            </div>
+            <div data-id="51" class="absolute bottom-0 left-0 right-0 h-20" style="background: linear-gradient(to top, #F5F5F0, transparent);"></div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section data-id="52" id="about" class="bg-cream py-16 md:py-24 lg:py-28">
+            <div data-id="53" class="max-w-6xl mx-auto px-5 md:px-8">
+                <div data-id="54" class="text-center mb-12 fade-in">
+                    <p data-id="55" class="text-gold font-semibold tracking-wider uppercase text-sm mb-3">Who We Are</p>
+                    <h2 data-id="56" class="font-display text-3xl md:text-4xl lg:text-5xl text-navy mb-2">About RS Canine Rescue</h2>
+                    <div data-id="57" class="w-16 h-1 bg-gold mx-auto mt-4 rounded-full"></div>
+                </div>
+                <div data-id="58" class="max-w-3xl mx-auto mb-14 fade-in">
+                    <p data-id="59" class="text-gray-700 text-base md:text-lg leading-relaxed mb-5">
+                        Founded by <strong data-id="60" class="text-navy">Roy Baase</strong>, a 23-year U.S. Navy veteran with over 40 years of professional experience spanning military service, construction management, education, and community leadership — RS Canine Rescue was born from a simple belief: <em data-id="61">no dog should suffer because of where it was born.</em>
+                    </p>
+                    <p data-id="62" class="text-gray-700 text-base md:text-lg leading-relaxed">
+                        Based in <strong data-id="63" class="text-navy">Sumrall, Mississippi</strong>, we are a nonprofit organization dedicated to rescuing abandoned, surrendered, and at-risk dogs in rural south Mississippi — a region where dedicated canine rescue infrastructure is virtually nonexistent.
+                    </p>
+                </div>
+                <div data-id="64" class="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-8 fade-in">
+                    <div data-id="65" class="stat-card">
+                        <p data-id="66" class="text-4xl md:text-5xl font-extrabold text-navy mb-1">23</p>
+                        <p data-id="67" class="text-gold font-bold text-lg">Years</p>
+                        <p data-id="68" class="text-gray-500 text-sm mt-1">U.S. Navy Service</p>
+                    </div>
+                    <div data-id="69" class="stat-card">
+                        <p data-id="70" class="text-4xl md:text-5xl font-extrabold text-navy mb-1">40+</p>
+                        <p data-id="71" class="text-gold font-bold text-lg">Years</p>
+                        <p data-id="72" class="text-gray-500 text-sm mt-1">Professional Experience</p>
+                    </div>
+                    <div data-id="73" class="stat-card">
+                        <p data-id="74" class="text-4xl md:text-5xl font-extrabold text-navy mb-1">5</p>
+                        <p data-id="75" class="text-gold font-bold text-lg">Counties</p>
+                        <p data-id="76" class="text-gray-500 text-sm mt-1">Service Area</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- THE CRISIS SECTION -->
+        <section data-id="77" id="crisis" class="bg-white py-16 md:py-24 lg:py-28">
+            <div data-id="78" class="max-w-6xl mx-auto px-5 md:px-8">
+                <div data-id="79" class="text-center mb-12 fade-in">
+                    <p data-id="80" class="text-gold font-semibold tracking-wider uppercase text-sm mb-3">The Urgent Need</p>
+                    <h2 data-id="81" class="font-display text-3xl md:text-4xl lg:text-5xl text-navy mb-2">The Crisis in Rural Mississippi</h2>
+                    <div data-id="82" class="w-16 h-1 bg-gold mx-auto mt-4 rounded-full"></div>
+                </div>
+                <div data-id="83" class="max-w-3xl mx-auto mb-14 fade-in">
+                    <p data-id="84" class="text-gray-700 text-base md:text-lg leading-relaxed mb-5">
+                        Mississippi's euthanasia rate is <strong data-id="85" class="text-navy">18% — more than 3× the national average.</strong> Over 65,000 animals enter Mississippi shelters annually. Rural counties are hardest hit with fewer veterinary clinics, no affordable spay/neuter access, and severely overcrowded shelters.
+                    </p>
+                    <p data-id="86" class="text-gray-700 text-base md:text-lg leading-relaxed">
+                        In communities like Sumrall and surrounding Lamar County, there is <strong data-id="87" class="text-navy">no dedicated canine rescue facility.</strong> Dogs are routinely abandoned on roadsides or left outside shelters already at capacity.
+                    </p>
+                </div>
+                <div data-id="88" class="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-8 fade-in">
+                    <div data-id="89" class="crisis-stat">
+                        <p data-id="90" class="text-4xl md:text-5xl font-extrabold mb-2">18%</p>
+                        <p data-id="91" class="text-gold font-bold text-base">MS Euthanasia Rate</p>
+                        <p data-id="92" class="text-blue-200 text-sm mt-1">3× the National Average</p>
+                    </div>
+                    <div data-id="93" class="crisis-stat">
+                        <p data-id="94" class="text-4xl md:text-5xl font-extrabold mb-2">65,000+</p>
+                        <p data-id="95" class="text-gold font-bold text-base">Animals Enter</p>
+                        <p data-id="96" class="text-blue-200 text-sm mt-1">MS Shelters Annually</p>
+                    </div>
+                    <div data-id="97" class="crisis-stat">
+                        <p data-id="98" class="text-4xl md:text-5xl font-extrabold mb-2">30:1</p>
+                        <p data-id="99" class="text-gold font-bold text-base">Surrender Calls</p>
+                        <p data-id="100" class="text-blue-200 text-sm mt-1">Per Adoption</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROGRAMS SECTION -->
+        <section data-id="101" id="programs" class="bg-cream py-16 md:py-24 lg:py-28">
+            <div data-id="102" class="max-w-6xl mx-auto px-5 md:px-8">
+                <div data-id="103" class="text-center mb-14 fade-in">
+                    <p data-id="104" class="text-gold font-semibold tracking-wider uppercase text-sm mb-3">Our Work</p>
+                    <h2 data-id="105" class="font-display text-3xl md:text-4xl lg:text-5xl text-navy mb-2">What We Do</h2>
+                    <div data-id="106" class="w-16 h-1 bg-gold mx-auto mt-4 rounded-full"></div>
+                </div>
+                <div data-id="107" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    <div data-id="108" class="program-card fade-in">
+                        <div data-id="109" class="w-14 h-14 rounded-2xl bg-navy/5 flex items-center justify-center text-3xl mb-5">🏠</div>
+                        <h3 data-id="110" class="text-xl font-bold text-navy mb-3">Rescue &amp; Shelter</h3>
+                        <p data-id="111" class="text-gray-600 leading-relaxed">We provide safe, clean, climate-controlled shelter for abandoned and at-risk dogs in our purpose-built facility in Sumrall.</p>
+                    </div>
+                    <div data-id="112" class="program-card fade-in">
+                        <div data-id="113" class="w-14 h-14 rounded-2xl bg-navy/5 flex items-center justify-center text-3xl mb-5">🐕</div>
+                        <h3 data-id="114" class="text-xl font-bold text-navy mb-3">Foster-First Model</h3>
+                        <p data-id="115" class="text-gray-600 leading-relaxed">Every dog is matched with a trained foster family, providing individualized care and socialization while awaiting their forever home.</p>
+                    </div>
+                    <div data-id="116" class="program-card fade-in">
+                        <div data-id="117" class="w-14 h-14 rounded-2xl bg-navy/5 flex items-center justify-center text-3xl mb-5">✂️</div>
+                        <h3 data-id="118" class="text-xl font-bold text-navy mb-3">Spay/Neuter Access</h3>
+                        <p data-id="119" class="text-gray-600 leading-relaxed">Every rescue dog is spayed or neutered before adoption. We also connect community members with affordable spay/neuter resources to address the crisis at its root.</p>
+                    </div>
+                    <div data-id="120" class="program-card fade-in">
+                        <div data-id="121" class="w-14 h-14 rounded-2xl bg-navy/5 flex items-center justify-center text-3xl mb-5">💉</div>
+                        <h3 data-id="122" class="text-xl font-bold text-navy mb-3">Veterinary Care</h3>
+                        <p data-id="123" class="text-gray-600 leading-relaxed">Full intake medical care including vaccinations, microchipping, heartworm testing, and flea/tick treatment for every animal in our program.</p>
+                    </div>
+                    <div data-id="124" class="program-card fade-in">
+                        <div data-id="125" class="w-14 h-14 rounded-2xl bg-navy/5 flex items-center justify-center text-3xl mb-5">📚</div>
+                        <h3 data-id="126" class="text-xl font-bold text-navy mb-3">Community Education</h3>
+                        <p data-id="127" class="text-gray-600 leading-relaxed">Outreach programs in schools, churches, and civic groups teaching responsible pet ownership, heartworm prevention, and humane animal treatment.</p>
+                    </div>
+                    <div data-id="128" class="program-card fade-in">
+                        <div data-id="129" class="w-14 h-14 rounded-2xl bg-navy/5 flex items-center justify-center text-3xl mb-5">🚗</div>
+                        <h3 data-id="130" class="text-xl font-bold text-navy mb-3">Transport Network</h3>
+                        <p data-id="131" class="text-gray-600 leading-relaxed">Regional transport partnerships that move animals from high-intake areas to rescue partners with higher adoption demand, giving every dog the best chance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VOLUNTEER SECTION -->
+        <section data-id="132" id="volunteer" class="bg-white py-16 md:py-24 lg:py-28">
+            <div data-id="133" class="max-w-6xl mx-auto px-5 md:px-8">
+                <div data-id="134" class="text-center mb-6 fade-in">
+                    <p data-id="135" class="text-gold font-semibold tracking-wider uppercase text-sm mb-3">Get Involved</p>
+                    <h2 data-id="136" class="font-display text-3xl md:text-4xl lg:text-5xl text-navy mb-4">Make a Difference — Volunteer With Us</h2>
+                    <div data-id="137" class="w-16 h-1 bg-gold mx-auto mt-2 rounded-full"></div>
+                </div>
+                <p data-id="138" class="text-center text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-12 fade-in">
+                    We especially welcome <strong data-id="139" class="text-navy">adults age 50+</strong> who bring life experience, patience, and dedication. Every role makes a real impact.
+                </p>
+                <div data-id="140" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 mb-12">
+                    <div data-id="141" class="vol-card fade-in">
+                        <div data-id="142" class="flex items-start gap-3">
+                            <span data-id="143" class="text-2xl shrink-0">🏡</span>
+                            <div data-id="144">
+                                <h3 data-id="145" class="font-bold text-navy text-base">Foster Care Provider</h3>
+                                <p data-id="146" class="text-gray-600 text-sm mt-1">Open your home temporarily to a rescue dog in need of love and stability.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-id="147" class="vol-card fade-in">
+                        <div data-id="148" class="flex items-start gap-3">
+                            <span data-id="149" class="text-2xl shrink-0">🤝</span>
+                            <div data-id="150">
+                                <h3 data-id="151" class="font-bold text-navy text-base">Adoption Counselor</h3>
+                                <p data-id="152" class="text-gray-600 text-sm mt-1">Guide families through the adoption process and find the perfect match.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-id="153" class="vol-card fade-in">
+                        <div data-id="154" class="flex items-start gap-3">
+                            <span data-id="155" class="text-2xl shrink-0">🚙</span>
+                            <div data-id="156">
+                                <h3 data-id="157" class="font-bold text-navy text-base">Transport Volunteer</h3>
+                                <p data-id="158" class="text-gray-600 text-sm mt-1">Drive dogs between foster homes, veterinary clinics, and adoption events.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-id="159" class="vol-card fade-in">
+                        <div data-id="160" class="flex items-start gap-3">
+                            <span data-id="161" class="text-2xl shrink-0">🎉</span>
+                            <div data-id="162">
+                                <h3 data-id="163" class="font-bold text-navy text-base">Event &amp; Fundraising</h3>
+                                <p data-id="164" class="text-gray-600 text-sm mt-1">Plan and staff adoption events and community fundraisers.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-id="165" class="vol-card fade-in">
+                        <div data-id="166" class="flex items-start gap-3">
+                            <span data-id="167" class="text-2xl shrink-0">🐾</span>
+                            <div data-id="168">
+                                <h3 data-id="169" class="font-bold text-navy text-base">Animal Care</h3>
+                                <p data-id="170" class="text-gray-600 text-sm mt-1">Help with daily feeding, exercise, grooming, and facility upkeep.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-id="171" class="vol-card fade-in">
+                        <div data-id="172" class="flex items-start gap-3">
+                            <span data-id="173" class="text-2xl shrink-0">📢</span>
+                            <div data-id="174">
+                                <h3 data-id="175" class="font-bold text-navy text-base">Community Outreach</h3>
+                                <p data-id="176" class="text-gray-600 text-sm mt-1">Deliver education presentations at local schools, churches, and organizations.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-id="177" class="vol-card fade-in md:col-span-2 md:max-w-[calc(50%-0.625rem)]">
+                        <div data-id="178" class="flex items-start gap-3">
+                            <span data-id="179" class="text-2xl shrink-0">💼</span>
+                            <div data-id="180">
+                                <h3 data-id="181" class="font-bold text-navy text-base">Administrative Support</h3>
+                                <p data-id="182" class="text-gray-600 text-sm mt-1">Grant writing, social media, bookkeeping, and photography.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div data-id="183" class="text-center fade-in">
+                    <button data-id="184" class="btn-gold text-base md:text-lg min-h-[48px] cursor-pointer" id="volunteer-btn-k3m5">
+                        <i data-id="185" data-lucide="hand-helping" class="w-5 h-5"></i>
+                        Sign Up to Volunteer
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADOPT SECTION -->
+        <section data-id="186" id="adopt" class="bg-cream py-16 md:py-24 lg:py-28">
+            <div data-id="187" class="max-w-6xl mx-auto px-5 md:px-8">
+                <div data-id="188" class="text-center mb-6 fade-in">
+                    <p data-id="189" class="text-gold font-semibold tracking-wider uppercase text-sm mb-3">Adopt</p>
+                    <h2 data-id="190" class="font-display text-3xl md:text-4xl lg:text-5xl text-navy mb-4">Find Your New Best Friend</h2>
+                    <div data-id="191" class="w-16 h-1 bg-gold mx-auto mt-2 rounded-full"></div>
+                </div>
+                <div data-id="192" class="max-w-3xl mx-auto mb-14 fade-in">
+                    <p data-id="193" class="text-gray-700 text-base md:text-lg leading-relaxed mb-4 text-center">
+                        All dogs are <strong data-id="194" class="text-navy">spayed/neutered, vaccinated, microchipped, heartworm tested,</strong> and come with a starter supply kit. Adoption fees range from <strong data-id="195" class="text-navy">$75–$200</strong> on a sliding scale, with <strong data-id="196" class="text-navy">reduced fees for adults 60+.</strong>
+                    </p>
+                    <p data-id="197" class="text-gray-600 text-base leading-relaxed text-center">
+                        The process includes a meet-and-greet, home compatibility assessment, and post-adoption support.
+                    </p>
+                </div>
+                <div data-id="198" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-10">
+                    <div data-id="199" class="dog-card fade-in">
+                        <div data-id="200" class="relative">
+                            <img data-id="201" src="https://ts2.mm.bing.net/th?id=OIP.AtSKXDoDMM853Y94wegCngHaHa&pid=15.1&o=7&rm=3" alt="Adoptable golden retriever mix dog" class="w-full aspect-square object-cover" />
+                            <div data-id="202" class="absolute top-3 right-3 bg-gold text-navy text-xs font-bold px-3 py-1 rounded-full">Coming Soon</div>
+                        </div>
+                        <div data-id="203" class="p-5">
+                            <h3 data-id="204" class="font-bold text-navy text-lg mb-1">Your Future Best Friend</h3>
+                            <p data-id="205" class="text-gray-500 text-sm mb-3">Meet our first rescues soon!</p>
+                            <button data-id="206" class="learn-more-btn w-full py-2.5 border-2 border-navy text-navy font-semibold rounded-xl hover:bg-navy hover:text-white transition-all text-sm cursor-pointer">Learn More</button>
+                        </div>
+                    </div>
+                    <div data-id="207" class="dog-card fade-in">
+                        <div data-id="208" class="relative">
+                            <img data-id="209" src="https://ts2.mm.bing.net/th?id=OIP.kAnjLTf0rPtU1yI7EX7ePAHaE8&pid=15.1&o=7&rm=3" alt="Happy rescue dog outdoors ready for adoption" class="w-full aspect-square object-cover" />
+                            <div data-id="210" class="absolute top-3 right-3 bg-gold text-navy text-xs font-bold px-3 py-1 rounded-full">Coming Soon</div>
+                        </div>
+                        <div data-id="211" class="p-5">
+                            <h3 data-id="212" class="font-bold text-navy text-lg mb-1">Your Future Best Friend</h3>
+                            <p data-id="213" class="text-gray-500 text-sm mb-3">Meet our first rescues soon!</p>
+                            <button data-id="214" class="learn-more-btn w-full py-2.5 border-2 border-navy text-navy font-semibold rounded-xl hover:bg-navy hover:text-white transition-all text-sm cursor-pointer">Learn More</button>
+                        </div>
+                    </div>
+                    <div data-id="215" class="dog-card fade-in">
+                        <div data-id="216" class="relative">
+                            <img data-id="217" src="https://ts2.mm.bing.net/th?id=OIP.G6meSb3adoxE5poE8EWh6wHaHa&pid=15.1&o=7&rm=3" alt="Cute dog portrait looking at camera" class="w-full aspect-square object-cover" />
+                            <div data-id="218" class="absolute top-3 right-3 bg-gold text-navy text-xs font-bold px-3 py-1 rounded-full">Coming Soon</div>
+                        </div>
+                        <div data-id="219" class="p-5">
+                            <h3 data-id="220" class="font-bold text-navy text-lg mb-1">Your Future Best Friend</h3>
+                            <p data-id="221" class="text-gray-500 text-sm mb-3">Meet our first rescues soon!</p>
+                            <button data-id="222" class="learn-more-btn w-full py-2.5 border-2 border-navy text-navy font-semibold rounded-xl hover:bg-navy hover:text-white transition-all text-sm cursor-pointer">Learn More</button>
+                        </div>
+                    </div>
+                    <div data-id="223" class="dog-card fade-in">
+                        <div data-id="224" class="relative">
+                            <img data-id="225" src="https://ts1.mm.bing.net/th?id=OIP.AjjLMvs3H3OntwcNwBFh_gHaKn&pid=15.1&o=7&rm=3" alt="Golden retriever available for adoption" class="w-full aspect-square object-cover" />
+                            <div data-id="226" class="absolute top-3 right-3 bg-gold text-navy text-xs font-bold px-3 py-1 rounded-full">Coming Soon</div>
+                        </div>
+                        <div data-id="227" class="p-5">
+                            <h3 data-id="228" class="font-bold text-navy text-lg mb-1">Your Future Best Friend</h3>
+                            <p data-id="229" class="text-gray-500 text-sm mb-3">Meet our first rescues soon!</p>
+                            <button data-id="230" class="learn-more-btn w-full py-2.5 border-2 border-navy text-navy font-semibold rounded-xl hover:bg-navy hover:text-white transition-all text-sm cursor-pointer">Learn More</button>
+                        </div>
+                    </div>
+                    <div data-id="231" class="dog-card fade-in">
+                        <div data-id="232" class="relative">
+                            <img data-id="233" src="https://ts1.mm.bing.net/th?id=OIP.5tlcxGefpvP88vigsfvTHwHaE8&pid=15.1&o=7&rm=3" alt="Happy dog playing outdoors at rescue" class="w-full aspect-square object-cover" />
+                            <div data-id="234" class="absolute top-3 right-3 bg-gold text-navy text-xs font-bold px-3 py-1 rounded-full">Coming Soon</div>
+                        </div>
+                        <div data-id="235" class="p-5">
+                            <h3 data-id="236" class="font-bold text-navy text-lg mb-1">Your Future Best Friend</h3>
+                            <p data-id="237" class="text-gray-500 text-sm mb-3">Meet our first rescues soon!</p>
+                            <button data-id="238" class="learn-more-btn w-full py-2.5 border-2 border-navy text-navy font-semibold rounded-xl hover:bg-navy hover:text-white transition-all text-sm cursor-pointer">Learn More</button>
+                        </div>
+                    </div>
+                    <div data-id="239" class="dog-card fade-in">
+                        <div data-id="240" class="relative">
+                            <img data-id="241" src="https://ts2.mm.bing.net/th?id=OIP.PqP1Tkno1wU5SgW-wCnotQHaD0&pid=15.1&o=7&rm=3" alt="Dog adoption guide rescue dog" class="w-full aspect-square object-cover" />
+                            <div data-id="242" class="absolute top-3 right-3 bg-gold text-navy text-xs font-bold px-3 py-1 rounded-full">Coming Soon</div>
+                        </div>
+                        <div data-id="243" class="p-5">
+                            <h3 data-id="244" class="font-bold text-navy text-lg mb-1">Your Future Best Friend</h3>
+                            <p data-id="245" class="text-gray-500 text-sm mb-3">Meet our first rescues soon!</p>
+                            <button data-id="246" class="learn-more-btn w-full py-2.5 border-2 border-navy text-navy font-semibold rounded-xl hover:bg-navy hover:text-white transition-all text-sm cursor-pointer">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+                <div data-id="247" class="text-center fade-in">
+                    <div data-id="248" class="inline-flex items-center gap-2 bg-navy/5 px-6 py-3 rounded-xl">
+                        <i data-id="249" data-lucide="bell" class="w-5 h-5 text-gold"></i>
+                        <p data-id="250" class="text-navy font-medium text-sm md:text-base">Our adoption program launches soon! <a data-id="251" href="#contact" class="text-gold hover:text-gold-dark font-bold underline underline-offset-2">Contact us</a> to be notified when dogs become available.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DONATE SECTION -->
+        <section data-id="252" id="donate" class="bg-white py-16 md:py-24 lg:py-28">
+            <div data-id="253" class="max-w-6xl mx-auto px-5 md:px-8">
+                <div data-id="254" class="text-center mb-6 fade-in">
+                    <p data-id="255" class="text-gold font-semibold tracking-wider uppercase text-sm mb-3">Give</p>
+                    <h2 data-id="256" class="font-display text-3xl md:text-4xl lg:text-5xl text-navy mb-4">Support Our Mission</h2>
+                    <div data-id="257" class="w-16 h-1 bg-gold mx-auto mt-2 rounded-full"></div>
+                </div>
+                <p data-id="258" class="text-center text-gray-700 text-base md:text-lg max-w-2xl mx-auto mb-12 fade-in">
+                    Every dollar goes directly to saving lives — veterinary care, food, shelter, and the operating costs that keep our rescue running. We are a <strong data-id="259" class="text-navy">registered 501(c)(3) nonprofit</strong> and all donations are tax-deductible.
+                </p>
+                <div data-id="260" class="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-12">
+                    <div data-id="261" class="donate-card donate-btn fade-in" data-amount="25">
+                        <p data-id="262" class="text-3xl md:text-4xl font-extrabold text-navy mb-2">$25</p>
+                        <p data-id="263" class="text-gray-600 text-sm leading-snug">Feeds a rescue dog for one week</p>
+                    </div>
+                    <div data-id="264" class="donate-card donate-btn fade-in" data-amount="50">
+                        <p data-id="265" class="text-3xl md:text-4xl font-extrabold text-navy mb-2">$50</p>
+                        <p data-id="266" class="text-gray-600 text-sm leading-snug">Covers a microchip and vaccinations</p>
+                    </div>
+                    <div data-id="267" class="donate-card donate-btn fade-in" data-amount="100">
+                        <p data-id="268" class="text-3xl md:text-4xl font-extrabold text-navy mb-2">$100</p>
+                        <p data-id="269" class="text-gray-600 text-sm leading-snug">Provides heartworm treatment for one dog</p>
+                    </div>
+                    <div data-id="270" class="donate-card donate-btn fade-in" data-amount="250">
+                        <p data-id="271" class="text-3xl md:text-4xl font-extrabold text-navy mb-2">$250</p>
+                        <p data-id="272" class="text-gray-600 text-sm leading-snug">Sponsors a full veterinary intake package</p>
+                    </div>
+                    <div data-id="273" class="donate-card donate-btn fade-in" data-amount="500">
+                        <p data-id="274" class="text-3xl md:text-4xl font-extrabold text-navy mb-2">$500</p>
+                        <p data-id="275" class="text-gray-600 text-sm leading-snug">Supports one month of facility operations</p>
+                    </div>
+                    <div data-id="276" class="donate-card donate-btn fade-in" data-amount="custom">
+                        <p data-id="277" class="text-3xl md:text-4xl font-extrabold text-gold mb-2">$___</p>
+                        <p data-id="278" class="text-gray-600 text-sm leading-snug">Every dollar makes a difference</p>
+                    </div>
+                </div>
+                <div data-id="279" class="text-center mb-16 fade-in">
+                    <button data-id="280" class="btn-gold text-lg md:text-xl min-h-[52px] px-10 cursor-pointer" id="donate-now-btn-r9t2">
+                        <i data-id="281" data-lucide="heart-handshake" class="w-5 h-5"></i>
+                        Donate Now
+                    </button>
+                </div>
+
+                <!-- Monthly Supporter -->
+                <div data-id="282" class="max-w-4xl mx-auto fade-in">
+                    <div data-id="283" class="text-center mb-8">
+                        <h3 data-id="284" class="font-display text-2xl md:text-3xl text-navy mb-2">Become a Monthly Supporter</h3>
+                        <p data-id="285" class="text-gray-600">Sustained giving provides the reliable funding our rescue depends on.</p>
+                    </div>
+                    <div data-id="286" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div data-id="287" class="membership-card membership-btn cursor-pointer" data-tier="Friend">
+                            <p data-id="288" class="text-sm font-semibold text-gold tracking-wide uppercase mb-1">Friend</p>
+                            <p data-id="289" class="text-2xl font-extrabold text-navy">$5<span data-id="290" class="text-base font-medium text-gray-400">/mo</span></p>
+                        </div>
+                        <div data-id="291" class="membership-card membership-btn cursor-pointer" data-tier="Advocate">
+                            <p data-id="292" class="text-sm font-semibold text-gold tracking-wide uppercase mb-1">Advocate</p>
+                            <p data-id="293" class="text-2xl font-extrabold text-navy">$15<span data-id="294" class="text-base font-medium text-gray-400">/mo</span></p>
+                        </div>
+                        <div data-id="295" class="membership-card membership-btn cursor-pointer" data-tier="Champion">
+                            <p data-id="296" class="text-sm font-semibold text-gold tracking-wide uppercase mb-1">Champion</p>
+                            <p data-id="297" class="text-2xl font-extrabold text-navy">$25<span data-id="298" class="text-base font-medium text-gray-400">/mo</span></p>
+                        </div>
+                        <div data-id="299" class="membership-card membership-btn cursor-pointer" data-tier="Guardian">
+                            <p data-id="300" class="text-sm font-semibold text-gold tracking-wide uppercase mb-1">Guardian</p>
+                            <p data-id="301" class="text-2xl font-extrabold text-navy">$50<span data-id="302" class="text-base font-medium text-gray-400">/mo</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICE AREA SECTION -->
+        <section data-id="303" id="service-area" class="bg-cream py-16 md:py-24 lg:py-28">
+            <div data-id="304" class="max-w-5xl mx-auto px-5 md:px-8">
+                <div data-id="305" class="text-center mb-6 fade-in">
+                    <p data-id="306" class="text-gold font-semibold tracking-wider uppercase text-sm mb-3">Where We Work</p>
+                    <h2 data-id="307" class="font-display text-3xl md:text-4xl lg:text-5xl text-navy mb-4">Our Service Area</h2>
+                    <div data-id="308" class="w-16 h-1 bg-gold mx-auto mt-2 rounded-full"></div>
+                </div>
+                <p data-id="309" class="text-center text-gray-700 text-base md:text-lg max-w-2xl mx-auto mb-12 fade-in">
+                    Serving five counties across south-central Mississippi, with headquarters in Sumrall.
+                </p>
+                <div data-id="310" class="fade-in">
+                    <div data-id="311" class="bg-white rounded-2xl shadow-lg p-8 md:p-12 max-w-3xl mx-auto">
+                        <div data-id="312" class="flex flex-wrap items-center justify-center gap-3 md:gap-4">
+                            <div data-id="313" class="county-badge bg-navy/5 text-navy border border-navy/10">
+                                <i data-id="314" data-lucide="map-pin" class="w-4 h-4 text-navy/60"></i>
+                                Lamar County
+                            </div>
+                            <div data-id="315" class="county-badge bg-navy/5 text-navy border border-navy/10">
+                                <i data-id="316" data-lucide="map-pin" class="w-4 h-4 text-navy/60"></i>
+                                Forrest County
+                            </div>
+                            <div data-id="317" class="county-badge bg-navy/5 text-navy border border-navy/10">
+                                <i data-id="318" data-lucide="map-pin" class="w-4 h-4 text-navy/60"></i>
+                                Perry County
+                            </div>
+                            <div data-id="319" class="county-badge bg-navy/5 text-navy border border-navy/10">
+                                <i data-id="320" data-lucide="map-pin" class="w-4 h-4 text-navy/60"></i>
+                                Marion County
+                            </div>
+                            <div data-id="321" class="county-badge bg-navy/5 text-navy border border-navy/10">
+                                <i data-id="322" data-lucide="map-pin" class="w-4 h-4 text-navy/60"></i>
+                                Jefferson Davis County
+                            </div>
+                        </div>
+                        <div data-id="323" class="mt-8 text-center">
+                            <div data-id="324" class="inline-flex items-center gap-2 bg-gold/10 text-navy px-5 py-2.5 rounded-full font-bold">
+                                <i data-id="325" data-lucide="building-2" class="w-5 h-5 text-gold"></i>
+                                Headquarters: Sumrall, MS
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section data-id="326" id="contact" class="bg-white py-16 md:py-24 lg:py-28">
+            <div data-id="327" class="max-w-6xl mx-auto px-5 md:px-8">
+                <div data-id="328" class="text-center mb-12 fade-in">
+                    <p data-id="329" class="text-gold font-semibold tracking-wider uppercase text-sm mb-3">Reach Out</p>
+                    <h2 data-id="330" class="font-display text-3xl md:text-4xl lg:text-5xl text-navy mb-4">Get In Touch</h2>
+                    <div data-id="331" class="w-16 h-1 bg-gold mx-auto mt-2 rounded-full"></div>
+                </div>
+                <div data-id="332" class="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-14">
+                    <div data-id="333" class="lg:col-span-2 fade-in">
+                        <div data-id="334" class="bg-cream rounded-2xl p-8">
+                            <h3 data-id="335" class="font-bold text-navy text-xl mb-6">Contact Information</h3>
+                            <div data-id="336" class="space-y-5">
+                                <div data-id="337" class="flex items-start gap-4">
+                                    <div data-id="338" class="w-10 h-10 rounded-xl bg-navy/5 flex items-center justify-center shrink-0">
+                                        <i data-id="339" data-lucide="mail" class="w-5 h-5 text-navy"></i>
+                                    </div>
+                                    <div data-id="340">
+                                        <p data-id="341" class="text-sm text-gray-500 font-medium">General Inquiries</p>
+                                        <a data-id="342" href="mailto:info@rscaninerescue.org" class="text-navy font-semibold hover:text-gold transition-colors break-all">info@rscaninerescue.org</a>
+                                    </div>
+                                </div>
+                                <div data-id="343" class="flex items-start gap-4">
+                                    <div data-id="344" class="w-10 h-10 rounded-xl bg-navy/5 flex items-center justify-center shrink-0">
+                                        <i data-id="345" data-lucide="mail" class="w-5 h-5 text-navy"></i>
+                                    </div>
+                                    <div data-id="346">
+                                        <p data-id="347" class="text-sm text-gray-500 font-medium">Direct</p>
+                                        <a data-id="348" href="mailto:rscaninerescue@proton.me" class="text-navy font-semibold hover:text-gold transition-colors break-all">rscaninerescue@proton.me</a>
+                                    </div>
+                                </div>
+                                <div data-id="349" class="flex items-start gap-4">
+                                    <div data-id="350" class="w-10 h-10 rounded-xl bg-navy/5 flex items-center justify-center shrink-0">
+                                        <i data-id="351" data-lucide="map-pin" class="w-5 h-5 text-navy"></i>
+                                    </div>
+                                    <div data-id="352">
+                                        <p data-id="353" class="text-sm text-gray-500 font-medium">Location</p>
+                                        <p data-id="354" class="text-navy font-semibold">Sumrall, Mississippi</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-id="355" class="mt-8 p-5 rounded-xl bg-navy/5">
+                                <p data-id="356" class="text-navy text-sm font-medium leading-relaxed">🐾 We respond to all inquiries within <strong data-id="357">48 hours.</strong> Whether you want to adopt, volunteer, donate, or partner — we'd love to hear from you.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-id="358" class="lg:col-span-3 fade-in">
+                        <form data-id="359" id="contact-form-h8j3" class="space-y-5">
+                            <div data-id="360" class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div data-id="361">
+                                    <label data-id="362" for="contact-name" class="block text-sm font-semibold text-navy mb-1.5">Name <span data-id="363" class="text-red-400">*</span></label>
+                                    <input data-id="364" type="text" id="contact-name" required placeholder="Your full name" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-base transition-all bg-white" />
+                                </div>
+                                <div data-id="365">
+                                    <label data-id="366" for="contact-email" class="block text-sm font-semibold text-navy mb-1.5">Email <span data-id="367" class="text-red-400">*</span></label>
+                                    <input data-id="368" type="email" id="contact-email" required placeholder="you@example.com" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-base transition-all bg-white" />
+                                </div>
+                            </div>
+                            <div data-id="369">
+                                <label data-id="370" for="contact-subject" class="block text-sm font-semibold text-navy mb-1.5">Subject</label>
+                                <select data-id="371" id="contact-subject" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-base transition-all bg-white appearance-none cursor-pointer">
+                                    <option data-id="372" value="">Select a topic...</option>
+                                    <option data-id="373" value="general">General Inquiry</option>
+                                    <option data-id="374" value="volunteer">Volunteer Interest</option>
+                                    <option data-id="375" value="adoption">Adoption Question</option>
+                                    <option data-id="376" value="donation">Donation</option>
+                                    <option data-id="377" value="partnership">Partnership</option>
+                                    <option data-id="378" value="other">Other</option>
+                                </select>
+                            </div>
+                            <div data-id="379">
+                                <label data-id="380" for="contact-message" class="block text-sm font-semibold text-navy mb-1.5">Message <span data-id="381" class="text-red-400">*</span></label>
+                                <textarea data-id="382" id="contact-message" required rows="5" placeholder="Tell us how you'd like to help or what you'd like to know..." class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-base transition-all bg-white resize-y"></textarea>
+                            </div>
+                            <button data-id="383" type="submit" class="btn-gold text-base min-h-[48px] w-full sm:w-auto cursor-pointer" id="contact-submit-p5d7">
+                                <i data-id="384" data-lucide="send" class="w-5 h-5"></i>
+                                Send Message
+                            </button>
+                        </form>
+                        <div data-id="385" id="form-success-msg-t4a2" class="hidden mt-6 bg-green-50 border border-green-200 rounded-xl p-5 text-center">
+                            <p data-id="386" class="text-green-800 font-semibold text-lg mb-1">🐾 Thank you for reaching out!</p>
+                            <p data-id="387" class="text-green-700">We'll get back to you within 48 hours at <strong data-id="388">info@rscaninerescue.org</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- DONATE / MEMBERSHIP MODAL -->
+    <div data-id="389" id="donate-modal-w3x1" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Donation information">
+        <div data-id="390" class="modal-content">
+            <div data-id="391" class="flex items-center justify-between mb-5">
+                <h3 data-id="392" class="font-display text-xl text-navy">Support RS Canine Rescue</h3>
+                <button data-id="393" class="p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer" id="modal-close-btn-u6f2" aria-label="Close modal">
+                    <i data-id="394" data-lucide="x" class="w-5 h-5 text-gray-500"></i>
+                </button>
+            </div>
+            <div data-id="395" class="bg-cream rounded-xl p-5 mb-5">
+                <p data-id="396" class="text-navy font-semibold mb-2">🐾 Online donations coming soon!</p>
+                <p data-id="397" class="text-gray-600 text-sm leading-relaxed">We are currently setting up our secure online donation platform. In the meantime, please contact us directly to make a contribution.</p>
+            </div>
+            <div data-id="398" class="flex items-center gap-3 text-sm">
+                <i data-id="399" data-lucide="mail" class="w-4 h-4 text-gold shrink-0"></i>
+                <a data-id="400" href="mailto:info@rscaninerescue.org" class="text-navy font-semibold hover:text-gold transition-colors">info@rscaninerescue.org</a>
+            </div>
+            <div data-id="401" class="mt-5 pt-4 border-t border-gray-100">
+                <button data-id="402" class="btn-gold w-full justify-center text-sm min-h-[44px] cursor-pointer" id="modal-contact-btn-y2v3">
+                    <i data-id="403" data-lucide="message-circle" class="w-4 h-4"></i>
+                    Contact Us to Donate
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer data-id="404" class="bg-navy-darker text-white pt-14 pb-8">
+        <div data-id="405" class="max-w-6xl mx-auto px-5 md:px-8">
+            <div data-id="406" class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+                <div data-id="407">
+                    <div data-id="408" class="flex items-center gap-2 mb-4">
+                        <span data-id="409" class="text-2xl">🐾</span>
+                        <span data-id="410" class="font-display text-xl font-bold">RS Canine Rescue</span>
+                    </div>
+                    <p data-id="411" class="text-gold font-semibold tracking-wide mb-3">Rescue. Rehabilitate. Rehome.</p>
+                    <p data-id="412" class="text-blue-200/70 text-sm leading-relaxed">Saving lives in rural south Mississippi, one dog at a time.</p>
+                </div>
+                <div data-id="413">
+                    <h4 data-id="414" class="font-bold text-white mb-4">Quick Links</h4>
+                    <nav data-id="415" class="grid grid-cols-2 gap-x-4 gap-y-2" aria-label="Footer navigation">
+                        <a data-id="416" href="#home" class="text-blue-200/70 hover:text-white text-sm transition-colors">Home</a>
+                        <a data-id="417" href="#volunteer" class="text-blue-200/70 hover:text-white text-sm transition-colors">Volunteer</a>
+                        <a data-id="418" href="#about" class="text-blue-200/70 hover:text-white text-sm transition-colors">About</a>
+                        <a data-id="419" href="#adopt" class="text-blue-200/70 hover:text-white text-sm transition-colors">Adopt</a>
+                        <a data-id="420" href="#crisis" class="text-blue-200/70 hover:text-white text-sm transition-colors">Our Mission</a>
+                        <a data-id="421" href="#donate" class="text-blue-200/70 hover:text-white text-sm transition-colors">Donate</a>
+                        <a data-id="422" href="#programs" class="text-blue-200/70 hover:text-white text-sm transition-colors">Programs</a>
+                        <a data-id="423" href="#contact" class="text-blue-200/70 hover:text-white text-sm transition-colors">Contact</a>
+                    </nav>
+                </div>
+                <div data-id="424">
+                    <h4 data-id="425" class="font-bold text-white mb-4">Contact</h4>
+                    <div data-id="426" class="space-y-3">
+                        <div data-id="427" class="flex items-center gap-2 text-blue-200/70 text-sm">
+                            <i data-id="428" data-lucide="mail" class="w-4 h-4 text-gold/80"></i>
+                            <a data-id="429" href="mailto:info@rscaninerescue.org" class="hover:text-white transition-colors">info@rscaninerescue.org</a>
+                        </div>
+                        <div data-id="430" class="flex items-center gap-2 text-blue-200/70 text-sm">
+                            <i data-id="431" data-lucide="globe" class="w-4 h-4 text-gold/80"></i>
+                            <span data-id="432" class="hover:text-white transition-colors">rscaninerescue.org</span>
+                        </div>
+                        <div data-id="433" class="flex items-center gap-2 text-blue-200/70 text-sm">
+                            <i data-id="434" data-lucide="map-pin" class="w-4 h-4 text-gold/80"></i>
+                            <span data-id="435">Sumrall, Mississippi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div data-id="436" class="border-t border-white/10 pt-6">
+                <div data-id="437" class="text-center space-y-2">
+                    <p data-id="438" class="text-blue-200/50 text-xs">RS Canine Rescue is a registered 501(c)(3) nonprofit organization. All donations are tax-deductible.</p>
+                    <p data-id="439" class="text-blue-200/40 text-xs">&copy; 2026 RS Canine Rescue. All rights reserved.</p>
+                    <p data-id="440" class="text-blue-200/30 text-xs mt-3">Made by Copilot</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BACK TO TOP BUTTON -->
+    <button data-id="441" id="back-to-top" aria-label="Back to top">
+        <i data-id="442" data-lucide="chevron-up" class="w-5 h-5"></i>
+    </button>
+
+    <script>
+        lucide.createIcons();
+
+        // Mobile menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn-a7k3');
+        const mobileMenu = document.getElementById('mobile-menu-p9r2');
+        const mobileMenuClose = document.getElementById('mobile-menu-close-b2c4');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+
+        mobileMenuClose.addEventListener('click', function() {
+            mobileMenu.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+
+        mobileNavLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.add('hidden');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Scroll animations
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -40px 0px' };
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        fadeElements.forEach(function(el) { observer.observe(el); });
+
+        // Back to top
+        const backToTopBtn = document.getElementById('back-to-top');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 500) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Donate modal
+        const donateModal = document.getElementById('donate-modal-w3x1');
+        const modalCloseBtn = document.getElementById('modal-close-btn-u6f2');
+        const donateNowBtn = document.getElementById('donate-now-btn-r9t2');
+        const modalContactBtn = document.getElementById('modal-contact-btn-y2v3');
+
+        function openDonateModal() {
+            donateModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDonateModal() {
+            donateModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        donateNowBtn.addEventListener('click', openDonateModal);
+        modalCloseBtn.addEventListener('click', closeDonateModal);
+        donateModal.addEventListener('click', function(e) {
+            if (e.target === donateModal) closeDonateModal();
+        });
+
+        modalContactBtn.addEventListener('click', function() {
+            closeDonateModal();
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Donate cards
+        document.querySelectorAll('.donate-btn').forEach(function(card) {
+            card.addEventListener('click', openDonateModal);
+        });
+
+        // Membership cards
+        document.querySelectorAll('.membership-btn').forEach(function(card) {
+            card.addEventListener('click', openDonateModal);
+        });
+
+        // Learn more buttons (adopt cards)
+        document.querySelectorAll('.learn-more-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Volunteer button
+        document.getElementById('volunteer-btn-k3m5').addEventListener('click', function() {
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(function() {
+                var subjectSelect = document.getElementById('contact-subject');
+                subjectSelect.value = 'volunteer';
+            }, 500);
+        });
+
+        // Contact form
+        var contactForm = document.getElementById('contact-form-h8j3');
+        var successMsg = document.getElementById('form-success-msg-t4a2');
+
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            contactForm.classList.add('hidden');
+            successMsg.classList.remove('hidden');
+            successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        // Active nav link highlighting on scroll
+        var sections = document.querySelectorAll('section[id]');
+        window.addEventListener('scroll', function() {
+            var scrollY = window.scrollY + 100;
+            sections.forEach(function(section) {
+                var top = section.offsetTop;
+                var height = section.offsetHeight;
+                var id = section.getAttribute('id');
+                var links = document.querySelectorAll('.nav-link[href="#' + id + '"]');
+                links.forEach(function(link) {
+                    if (scrollY >= top && scrollY < top + height) {
+                        link.classList.add('text-white');
+                        link.classList.add('bg-white/10');
+                        link.classList.remove('text-white/80');
+                    } else {
+                        link.classList.remove('text-white');
+                        link.classList.remove('bg-white/10');
+                        link.classList.add('text-white/80');
+                    }
+                });
+            });
+        });
+
+        // Escape key closes modal and mobile menu
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDonateModal();
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+    </script>
+</body>
 </html>
