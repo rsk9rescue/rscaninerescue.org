@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RS Canine Rescue</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+
+  <!-- Hero Section -->
+  <header class="bg-yellow-600 text-white py-20 text-center">
+    <h1 class="text-5xl font-bold mb-4">Saving Dogs. Serving Rural Mississippi.</h1>
+    <p class="text-xl max-w-3xl mx-auto">
+      RS Canine Rescue is dedicated to saving dogs across rural South Mississippi,
+      providing care, compassion, and second chances.
+    </p>
+  </header>
+
+  <!-- Mission Section -->
+  <section class="max-w-5xl mx-auto px-4 py-16 text-center">
+    <h2 class="text-3xl font-bold mb-6">Our Mission</h2>
+    <p class="text-lg leading-relaxed">
+      We rescue, rehabilitate, and rehome dogs in need across rural communities.
+      Our work focuses on saving lives, reducing overpopulation, and supporting
+      families and pets through education and community outreach.
+    </p>
+  </section>
+
+  <!-- About Section -->
+  <section class="max-w-5xl mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold mb-6 text-center">About RS Canine Rescue</h2>
+    <p class="text-lg leading-relaxed mb-6">
+      RS Canine Rescue serves rural South Mississippi, focusing on saving dogs in communities
+      with limited resources, high overpopulation, and few dedicated rescue organizations.
+      We are based in Sumrall, Mississippi, serving Lamar, Forrest, Perry, Marion, and Jefferson Davis Counties.
+    </p>
+    <p class="text-lg leading-relaxed">
+      Our rescue is built on compassion, community involvement, and a commitment to giving dogs
+      the second chance they deserve. We work with volunteers, fosters, transport partners,
+      and adopters across the region to ensure every dog receives the care and love they need.
+    </p>
+  </section>
+
+  <!-- Adopt Section -->
+  <section class="max-w-5xl mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold mb-10 text-center">Adoptable Dogs</h2>
+
+    <div class="grid md:grid-cols-3 gap-10">
+
+      <!-- Dog 1 -->
+      <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <img src="images/dog1.jpg" alt="Dog 1" class="w-full h-64 object-cover">
+        <div class="p-4">
+          <h3 class="text-xl font-bold mb-2">Dog Name</h3>
+          <p class="text-gray-700">Short description of the dog.</p>
+        </div>
+      </div>
+
+      <!-- Dog 2 -->
+      <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <img src="images/dog2.jpg" alt="Dog 2" class="w-full h-64 object-cover">
+        <div class="p-4">
+          <h3 class="text-xl font-bold mb-2">Dog Name</h3>
+          <p class="text-gray-700">Short description of the dog.</p>
+        </div>
+      </div>
+
+      <!-- Dog 3 -->
+      <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <img src="images/dog3.jpg" alt="Dog 3" class="w-full h-64 object-cover">
+        <div class="p-4">
+          <h3 class="text-xl font-bold mb-2">Dog Name</h3>
+          <p class="text-gray-700">Short description of the dog.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Volunteer Section -->
+  <section class="max-w-5xl mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold mb-6 text-center">Volunteer With Us</h2>
+    <p class="text-lg leading-relaxed mb-10 text-center">
+      Volunteers are the backbone of RS Canine Rescue. Whether you’re helping with transport,
+      fostering, events, or daily care, your time makes a life-changing impact.
+    </p>
+
+    <ul class="list-disc pl-6 text-lg space-y-2">
+      <li>Foster dogs in need</li>
+      <li>Assist with transport</li>
+      <li>Help at adoption events</li>
+      <li>Support administrative tasks</li>
+      <li>Community outreach and education</li>
+    </ul>
+  </section>
+
+  <!-- Support Section -->
+  <section class="max-w-5xl mx-auto px-4 py-16 text-center">
+    <h2 class="text-3xl font-bold mb-6">Support RS Canine Rescue</h2>
+    <p class="text-lg leading-relaxed mb-10">
+      Every dollar makes a difference. Your support helps us rescue, rehabilitate,
+      and rehome dogs across rural Mississippi.
+    </p>
+
+    <!-- Gold Donate Button -->
+    <a 
+      href="https://www.paypal.com/donate?hosted_button_id=9ABMM5W85MEAQ"
+      target="_blank"
+      class="inline-block bg-yellow-600 text-white font-bold text-xl px-10 py-4 rounded-lg shadow-lg mb-10"
+    >
+      🐾 Donate to RS Canine Rescue
+    </a>
+
+    <h3 class="text-2xl font-bold mt-10 mb-4">Become a Monthly Supporter</h3>
+    <ul class="text-lg space-y-2">
+      <li>Friend — $5/mo</li>
+      <li>Advocate — $15/mo</li>
+      <li>Champion — $25/mo</li>
+      <li>Guardian — $50/mo</li>
+    </ul>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="max-w-5xl mx-auto px-4 py-16 text-center">
+    <h2 class="text-3xl font-bold mb-6">Contact Us</h2>
+
+    <p class="text-lg leading-relaxed mb-6">
+      We’re here to help. Reach out with questions about adoption, volunteering,
+      or supporting our mission.
+    </p>
+
+    <p class="text-xl font-semibold mb-2">Email:</p>
+    <p class="text-lg mb-6">info@rscaninerescue.org</p>
+
+    <p class="text-xl font-semibold mb-2">Location:</p>
+    <p class="text-lg mb-6">292 Crossroads Church Rd, Sumrall, MS 39482</p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white py-6 mt-20 text-center shadow-inner">
+    <p class="text-sm">© 2026 RS Canine Rescue — Sumrall, Mississippi</p>
+  </footer>
+
+</body>
+</html>
